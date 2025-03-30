@@ -44,7 +44,14 @@
 	<script type="text/javascript" src="js/Particles.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-	
+	<script type="text/javascript">
+		$(function() {
+			WarpKlondikeMain.init();
+			$('.github-fork-ribbon-wrapper').bind('touchstart', function() {
+				document.location.href = $(this).find('a').attr('href');
+			});	
+		});
+	</script>
 	<link href='https://fonts.googleapis.com/css?family=La+Belle+Aurore&v1' rel='stylesheet' type='text/css'>
 </head>
 <body class="hd" touch-action="none">
